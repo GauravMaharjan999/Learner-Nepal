@@ -1,0 +1,552 @@
+﻿@{
+    ViewData["Title"] = "Course Detail";
+}
+@using Kachuwa.Identity.Extensions;
+@using Kachuwa.Training.Model
+@model CourseDetailViewModel
+<!-- Inner Page Breadcrumb -->
+<section class="inner_page_breadcrumb csv2" style=" background-image :url(@Model.Course.CoverImagePath)">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9">
+                <div class="breadcrumb_content">
+                    <div class="cs_row_one csv2">
+                        <div class="cs_ins_container">
+                            <div class="cs_instructor">
+                                <ul class="cs_instrct_list float-left mb0">
+                                    @if (Model.TrainingTutor != null)
+                                    {
+                                        @if (Model.TrainingTutor.ProfileImagePath != "/" || Model.TrainingTutor.ProfileImagePath != null)
+                                        {
+                                            <li class="list-inline-item"><img class="thumb" src="@Model.TrainingTutor.ProfileImagePath" alt="4.png"></li>
+                                        }
+                                        @if (Model.TrainingTutor.Name != null)
+                                        {
+                                            <li class="list-inline-item"><a class="color-white" href="#">@Model.TrainingTutor.Name</a></li>
+
+                                        }
+                                    }
+
+
+                                </ul>
+                                @*<ul class="cs_watch_list float-right mb0">
+                                    <li class="list-inline-item"><a class="color-white" href="#"><span class="flaticon-like"></span></a></li>
+                                    <li class="list-inline-item"><a class="color-white" href="#">Add to Wishlist</a></li>
+                                    <li class="list-inline-item"><a class="color-white" href="#"><span class="flaticon-share"> Share</span></a></li>
+                                </ul>*@
+                            </div>
+                            @if (Model.Course.Name != null)
+                            {
+                                <h2 class="cs_title color-white">@Model.Course.Name</h2>
+                            }
+                            @if (Model.Course.ShortDescription != null)
+                            {
+                                <h5 class="cs_title color-white">@Model.Course.ShortDescription</h5>
+                            }
+
+                            <input type="hidden" value="@User.Identity.GetIdentityUserId()" id="hdnidentityuserid" />
+                            <input type="hidden" value="@Model.Course.Id)" id="hdncourseId" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Team Members -->
+<section class="course-single2 pb40">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-8 col-xl-9">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="courses_single_container">
+                            <div class="cs_row_one">
+                                <div class="cs_ins_container">
+                                    <div class="courses_big_thumb">
+                                        <div class="thumb">
+                                            @if (Model.Course.IntroVideoPath != null)
+                                            {
+                                                <iframe class="iframe_video" src="//@Model.Course.IntroVideoPath" frameborder="0" allowfullscreen=""></iframe>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cs_rwo_tabs csv2">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="Overview-tab" data-toggle="tab" href="#Overview" role="tab" aria-controls="Overview" aria-selected="true">Overview</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="course-tab" data-toggle="tab" href="#course" role="tab" aria-controls="course" aria-selected="false">Course Content</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="instructor-tab" data-toggle="tab" href="#instructor" role="tab" aria-controls="instructor" aria-selected="false">Tutor</a>
+                                    </li>
+                                    @*<li class="nav-item">
+                                        <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Review</a>
+                                    </li>*@
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="Overview" role="tabpanel" aria-labelledby="Overview-tab">
+                                        <div class="cs_row_two csv2">
+                                            <div class="cs_overview">
+                                                <h4 class="title">Overview</h4>
+
+                                                @if (Model.Course.ShortDescription != null)
+                                                {
+                                                    <h4 class="subtitle">Course Description</h4>
+                                                    <p>@Model.Course.ShortDescription</p>
+                                                }
+
+                                                <h4 class="subtitle">What you'll learn</h4>
+                                                <ul class="cs_course_syslebus">
+
+                                                    @Html.Raw(Model.Course.Description)
+                                                </ul>
+
+                                                @if (Model.Course.PreRequisites != null)
+                                                {
+                                                    <h4 class="subtitle">Requirements</h4>
+                                                    @Html.Raw(Model.Course.PreRequisites)
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="course" role="tabpanel" aria-labelledby="review-tab">
+                                        <div class="cs_row_three csv2">
+                                            <div class="course_content">
+                                                <div class="cc_headers">
+                                                    <h4 class="title">Course Content</h4>
+                                                    @*<ul class="course_schdule float-right">
+                                                        <li class="list-inline-item"><a href="#">92 Lectures</a></li>
+                                                        <li class="list-inline-item"><a href="#">10:56:11</a></li>
+                                                    </ul>*@
+                                                </div>
+                                                <br>
+                                                @if (Model.CourseSyllabus != null)
+                                                {
+                                                    @foreach (var item in Model.CourseSyllabus)
+                                                    {
+                                                        var divclose = "";
+                                                        divclose = "panelbody" + item.Id + "";
+
+                                                        <div class="details">
+                                                            <div id="accordion" class="panel-group cc_tab">
+                                                                <div class="panel">
+                                                                    <div class="panel-heading">
+                                                                        <h4 class="panel-title">
+                                                                            <a href="#@divclose" class="accordion-toggle link" data-toggle="collapse" data-parent="#accordion">@item.Title</a>
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div id="@divclose" class="panel-collapse collapse hide">
+                                                                        <div class="panel-body">
+                                                                            @Html.Raw(item.Content)
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="instructor" role="tabpanel" aria-labelledby="review-tab">
+                                        <div class="cs_row_four csv2">
+                                            <div class="about_ins_container">
+                                                <h4 class="aii_title">About the Tutor</h4>
+                                                <div class="about_ins_info">
+                                                    @if (Model.TrainingTutor != null)
+                                                    {
+                                                        <div class="thumb"><img src="@Model.TrainingTutor.ProfileImagePath" alt="tutor.png" style="width:120px;"></div>
+                                                    }
+
+                                                </div>
+                                                <div class="details">
+                                                    @*<ul class="review_list">
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item">4.5 Instructor Rating</li>
+                                                        </ul>
+                                                        <ul class="about_info_list">
+                                                            <li class="list-inline-item"><span class="flaticon-comment"></span> 12,197 Reviews </li>
+                                                            <li class="list-inline-item"><span class="flaticon-profile"></span> 141,745 Students </li>
+                                                            <li class="list-inline-item"><span class="flaticon-play-button-1"></span> 5Courses </li>
+                                                        </ul>*@
+                                                    @if (Model.TrainingTutor != null)
+                                                    {
+                                                        <h4>@Model.TrainingTutor.Name</h4>
+                                                        <p class="subtitle">@Model.TrainingTutor.Expertise</p>
+                                                        <p>@Html.Raw(Model.TrainingTutor.Bio)</p>
+                                                    }
+
+                                                    @*<p class="mb25">UI/UX Designer, with 7+ Years Experience. Guarantee of High Quality Work. </p>
+                                                        <p class="mb25">Skills: Web Design, UI Design, UX/UI Design, Mobile Design, User Interface Design, Sketch, Photoshop, GUI, Html, Css, Grid Systems, Typography, Minimal, Template, English, Bootstrap, Responsive Web Design, Pixel Perfect, Graphic Design, Corporate, Creative, Flat, Luxury and much more.</p>
+                                                        <ul class="about_ins_list mb0">
+                                                            <li><p>Available for:</p></li>
+                                                            <li><a href="#">1. Full Time Office Work</a></li>
+                                                            <li><a href="#">2. Remote Work</a></li>
+                                                            <li><a href="#">3. Freelance</a></li>
+                                                            <li><a href="#">4. Contract</a></li>
+                                                            <li><a href="#">5. Worldwide</a></li>
+                                                        </ul>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                                        <div class="cs_row_five csv2">
+                                            <div class="student_feedback_container">
+                                                <h4 class="aii_title">Student feedback</h4>
+                                                <div class="s_feeback_content">
+                                                    <ul class="skills">
+                                                        <li class="list-inline-item">Stars 5</li>
+                                                        <li class="list-inline-item progressbar1" data-width="84" data-target="100">%84</li>
+                                                    </ul>
+                                                    <ul class="skills">
+                                                        <li class="list-inline-item">Stars 4</li>
+                                                        <li class="list-inline-item progressbar2" data-width="9" data-target="100">%9</li>
+                                                    </ul>
+                                                    <ul class="skills">
+                                                        <li class="list-inline-item">Stars 3</li>
+                                                        <li class="list-inline-item progressbar3" data-width="3" data-target="100">%3</li>
+                                                    </ul>
+                                                    <ul class="skills">
+                                                        <li class="list-inline-item">Stars 2</li>
+                                                        <li class="list-inline-item progressbar4" data-width="1" data-target="100">%1</li>
+                                                    </ul>
+                                                    <ul class="skills">
+                                                        <li class="list-inline-item">Stars 1</li>
+                                                        <li class="list-inline-item progressbar5" data-width="2" data-target="100">%2</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="aii_average_review text-center">
+                                                    <div class="av_content">
+                                                        <h2>4.5</h2>
+                                                        <ul class="aii_rive_list mb0">
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                                        </ul>
+                                                        <p>Course Rating</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="cs_row_six csv2">
+                                            <div class="sfeedbacks">
+                                                <div class="mbp_pagination_comments">
+                                                    <div class="mbp_first media csv1">
+                                                        <img src="/themes/shared/default/images/resource/review1.png" class="mr-3" alt="review1.png">
+                                                        <div class="media-body">
+                                                            <h4 class="sub_title mt-0">
+                                                                Warren Bethell
+                                                                <span class="sspd_review float-right">
+                                                                    <ul>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"></li>
+                                                                    </ul>
+                                                                </span>
+                                                            </h4>
+                                                            <a class="sspd_postdate fz14" href="#">6 months ago</a>
+                                                            <p class="fz15 mt20">This is the second Photoshop course I have completed with Cristian. Worth every penny and recommend it highly. To get the most out of this course, its best to to take the Beginner to Advanced course first.</p>
+                                                            <p class="fz15 mt25 mb25">The sound and video quality is of a good standard. Thank you Cristian.</p> <div class="ssp_reply float-right"><span class="flaticon-consulting-message"></span><span class="pl10">Reply</span></div>
+                                                            <div class="sspd_review_liked"><a href="#"><i class="flaticon-like-1"></i> <span class="text-thm6 pl5 pr5 fz15">15</span> Thank Waren</a></div>
+                                                            <div class="custom_hr style2"></div>
+                                                            <div class="mbp_sub media csv1">
+                                                                <a href="#"><img src="/themes/shared/default/images/resource/review1.png" class="mr-3" alt="review1.png"></a>
+                                                                <div class="media-body">
+                                                                    <h4 class="sub_title mt-0">
+                                                                        Anton Hilton
+                                                                        <span class="sspd_review float-right">
+                                                                            <ul>
+                                                                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                                <li class="list-inline-item"></li>
+                                                                            </ul>
+                                                                        </span>
+                                                                    </h4>
+                                                                    <a class="sspd_postdate fz14" href="#">6 months ago</a>
+                                                                    <p class="fz15 mt20 mb50">This is the second Photoshop course I have completed with Cristian. Worth every penny and recommend it highly. To get the most out of this course, its best to to take the</p>
+                                                                    <div class="ssp_reply float-right"><span class="flaticon-consulting-message"></span><span class="pl10">Reply</span></div>
+                                                                    <div class="sspd_review_liked">
+                                                                        <a href="#"><i class="flaticon-like-1"></i><span class="text-thm6 pl5 pr5 fz15">15</span> Thank Waren</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="custom_hr"></div>
+                                                    <div class="mbp_second media csv1">
+                                                        <img src="/themes/shared/default/images/resource/review1.png" class="align-self-start mr-3" alt="review1.png">
+                                                        <div class="media-body">
+                                                            <h4 class="sub_title mt-0">
+                                                                Warren Bethell
+                                                                <span class="sspd_review float-right">
+                                                                    <ul>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                                                        <li class="list-inline-item"></li>
+                                                                    </ul>
+                                                                </span>
+                                                            </h4>
+                                                            <a class="sspd_postdate fz14" href="#">6 months ago</a>
+                                                            <p class="fz15 mt20">This is the second Photoshop course I have completed with Cristian. Worth every penny and recommend it highly. To get the most out of this course, its best to to take the Beginner to Advanced course first.</p>
+                                                            <p class="fz15 mt25 mb25">The sound and video quality is of a good standard. Thank you Cristian.</p> <div class="ssp_reply float-right"><span class="flaticon-consulting-message"></span><span class="pl10">Reply</span></div>
+                                                            <div class="sspd_review_liked"><a href="#"><i class="flaticon-like-1"></i> <span class="text-thm6 pl5 pr5 fz15">15</span> Thank Waren</a></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center mt50">
+                                                        <div class="custom_hr"></div>
+                                                        <button type="button" class="more-review-btn btn">See more reviews</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="cs_row_seven csv2">
+                                            <div class="sfeedbacks">
+                                                <div class="mbp_comment_form style2 pb0">
+                                                    <h4>Add Reviews & Rate</h4>
+                                                    <ul>
+                                                        <li class="list-inline-item pr15"><p>What is it like to Course?</p></li>
+                                                        <li class="list-inline-item">
+                                                            <span class="sspd_review">
+                                                                <ul>
+                                                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star fz18"></i></a></li>
+                                                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star fz18"></i></a></li>
+                                                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star fz18"></i></a></li>
+                                                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star fz18"></i></a></li>
+                                                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star fz18"></i></a></li>
+                                                                    <li class="list-inline-item"></li>
+                                                                </ul>
+                                                            </span>
+                                                        </li>
+                                                    </ul>
+                                                    <form class="comments_form">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputName1">Review Title</label>
+                                                            <input type="text" class="form-control" id="exampleInputName1" aria-describedby="textHelp">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="exampleFormControlTextarea1">Review Content</label>
+                                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-thm">Submit Review <span class="flaticon-right-arrow-1"></span></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col-lg-12">
+                        <h3 class="r_course_title">Related Courses</h3>
+                    </div>
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="top_courses">
+                            <div class="thumb">
+                                <img class="img-whp" src="/themes/shared/default/images/courses/t1.jpg" alt="t1.jpg">
+                                <div class="overlay">
+                                    <div class="tag">Best Seller</div>
+                                    <div class="icon"><span class="flaticon-like"></span></div>
+                                    <a class="tc_preview_course" href="#">Preview Course</a>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <div class="tc_content">
+                                    <p>Ali TUFAN</p>
+                                    <h5>Introduction Web Design with HTML</h5>
+                                    <ul class="tc_review">
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">(6)</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tc_footer">
+                                    <ul class="tc_meta float-left">
+                                        <li class="list-inline-item"><a href="#"><i class="flaticon-profile"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">1548</a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="flaticon-comment"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">25</a></li>
+                                    </ul>
+                                    <div class="tc_price float-right">$69.95</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="top_courses">
+                            <div class="thumb">
+                                <img class="img-whp" src="/themes/shared/default/images/courses/t2.jpg" alt="t2.jpg">
+                                <div class="overlay">
+                                    <div class="tag">Top Seller</div>
+                                    <div class="icon"><span class="flaticon-like"></span></div>
+                                    <a class="tc_preview_course" href="#">Preview Course</a>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <div class="tc_content">
+                                    <p>Ali TUFAN</p>
+                                    <h5>Designing a Responsive Mobile Website with Muse</h5>
+                                    <ul class="tc_review">
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">(6)</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tc_footer">
+                                    <ul class="tc_meta float-left">
+                                        <li class="list-inline-item"><a href="#"><i class="flaticon-profile"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">1548</a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="flaticon-comment"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">25</a></li>
+                                    </ul>
+                                    <div class="tc_price float-right">$69.95</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="top_courses">
+                            <div class="thumb">
+                                <img class="img-whp" src="/themes/shared/default/images/courses/t3.jpg" alt="t3.jpg">
+                                <div class="overlay">
+                                    <div class="tag">Top Seller</div>
+                                    <div class="icon"><span class="flaticon-like"></span></div>
+                                    <a class="tc_preview_course" href="#">Preview Course</a>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <div class="tc_content">
+                                    <p>Ali TUFAN</p>
+                                    <h5>Adobe XD: Prototyping Tips and Tricks</h5>
+                                    <ul class="tc_review">
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">(6)</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tc_footer">
+                                    <ul class="tc_meta float-left">
+                                        <li class="list-inline-item"><a href="#"><i class="flaticon-profile"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">1548</a></li>
+                                        <li class="list-inline-item"><a href="#"><i class="flaticon-comment"></i></a></li>
+                                        <li class="list-inline-item"><a href="#">25</a></li>
+                                    </ul>
+                                    <div class="tc_price float-right">$69.95</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+
+            <div class="col-lg-4 col-xl-3">
+                <div class="instructor_pricing_widget">
+                    <div class="price"><span>Price</span> Rs @Model.Course.CourseFee @*<small>$69.00</small>*@</div>
+                    <a href="#" class="cart_btnss" id="enrollnow">Enroll Now</a>
+
+
+                    @*<h5 class="subtitle text-left">Includes</h5>
+            <ul class="price_quere_list text-left">
+                <li><a href="#"><span class="flaticon-play-button-1"></span> 11 hours on-demand video</a></li>
+                <li><a href="#"><span class="flaticon-download"></span> 69 downloadable resources</a></li>
+                <li><a href="#"><span class="flaticon-key-1"></span> Full lifetime access</a></li>
+                <li><a href="#"><span class="flaticon-responsive"></span> Access on mobile and TV</a></li>
+                <li><a href="#"><span class="flaticon-flash"></span> Assignments</a></li>
+                <li><a href="#"><span class="flaticon-award"></span> Certificate of Completion</a></li>
+            </ul>*@
+                </div>
+                @*<div class="feature_course_widget csv1">
+            <ul class="list-group">
+                <h4 class="title">Course Features</h4>
+                <li class="d-flex justify-content-between align-items-center">
+                    Lectures <span class="float-right">6</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    Quizzes <span class="float-right">1</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    Duration <span class="float-right">3 hours</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    Skill level <span class="float-right">All level</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    Language <span class="float-right">English</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    Assessments <span class="float-right">Yes</span>
+                </li>
+            </ul>
+        </div>*@
+                @*@if (Model.Course.Tags != null || Model.Course.Tags != "")
+                {
+                    <div class="blog_tag_widget csv1">
+                        <h4 class="title">Tags</h4>
+                        <ul class="tag_list">
+                            <li class="list-inline-item"><a href="#">@Model.Course.Tags</a></li>
+                            @*<li class="list-inline-item"><a href="#">Sketch</a></li>
+                    <li class="list-inline-item"><a href="#">Beginner</a></li>
+                    <li class="list-inline-item"><a href="#">UX/UI</a></li>*@
+                       
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+
+    $('#enrollnow').on('click', function () {
+      
+        var identityuserId = parseInt($("#hdnidentityuserid").val());
+        if (identityuserId == 0) {
+            $('#exampleModalCenter').modal('toggle');
+        }
+        else {
+            var courseid = parseInt($("#hdncourseId").val());
+            window.location.href = '/checkenroll?UserId='+ identityuserId +'&CourseId=' + courseid;
+            //window.location.href = '/enroll/' +courseid;
+           
+        }
+       
+    });
+
+
+</script>

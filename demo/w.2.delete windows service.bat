@@ -1,0 +1,4 @@
+sc delete RTMPSERVER 
+pause
+
+
